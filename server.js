@@ -1,8 +1,9 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 
-const DB_HOST =
-  "mongodb+srv://Yevhenii:MongoCreateDb123@cluster0.nwubwpa.mongodb.net/contact_reader?retryWrites=true&w=majority";
+const { DB_HOST } = process.env;
+
+console.log(DB_HOST);
 
 mongoose.set("strictQuery", true);
 mongoose
