@@ -5,5 +5,6 @@ module.exports = {
   getContactById: controls.getContactById,
   createContact: controls.createContact,
   updateContact: controls.createContact,
+  updateFavorite: controls.updateFavorite,
   removeContact: controls.removeContact,
 };

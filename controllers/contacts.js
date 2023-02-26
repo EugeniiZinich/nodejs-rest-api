@@ -1,15 +1,9 @@
-const {
-  listContacts,
-  getContactId,
-  deleteContact,
-  addContact,
-  updateById,
-} = require("../models/contacts");
+const Contact = require("../models/contact");
 
 const { ctrlWrapper, HttpError } = require("../helpers");
 
-const getAllContacts = async (req, res) => {
-  const contacts = await listContacts();
+const getAllContacts = async (_, res) => {
+  const contacts = await Contact.find();
   if (!contacts) {
     throw HttpError(404, "Not Found");
   }
@@ -18,7 +12,8 @@ const getAllContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const finedContact = await getContactId(contactId);
+  // const finedContact = await Contact.findOne({ _id: contactId });
+  const finedContact = await Contact.findById(contactId);
 
   if (!finedContact) {
     throw HttpError(404, "Not Found");
@@ -28,7 +23,7 @@ const getContactById = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-  const newContact = await addContact(req.body);
+  const newContact = await Contact.create(req.body);
   res.status(201).json(newContact);
 };
 
@@ -37,7 +32,9 @@ const updateContact = async (req, res) => {
 
   const data = req.body;
 
-  const result = await updateById(contactId, data);
+  const result = await Contact.findByIdAndUpdate(contactId, data, {
+    new: true,
+  }); // if l wont see new object, need add { new: true }, otherwise l will see old contact
 
   if (!result) {
     throw HttpError(404, "Not Found");
@@ -46,9 +43,25 @@ const updateContact = async (req, res) => {
   res.json(result);
 };
 
+const updateFavorite = async (req, res) => {
+  const { contactId } = req.params;
+
+  const data = req.body;
+
+  const result = await Contact.findByIdAndUpdate(contactId, data, {
+    new: true,
+  });
+
+  if (!result) {
+    throw HttpError(404, "Not Found");
+  }
+
+  res.json({ status: 200, data: result });
+};
+
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await deleteContact(contactId);
+  const result = await Contact.findByIdAndDelete(contactId);
 
   if (!result) {
     throw HttpError(404, "Not Found");
@@ -62,5 +75,6 @@ module.exports = {
   getContactById: ctrlWrapper(getContactById),
   createContact: ctrlWrapper(createContact),
   updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
   removeContact: ctrlWrapper(removeContact),
 };

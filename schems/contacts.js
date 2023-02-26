@@ -7,8 +7,14 @@ const contactSchema = Joi.object({
     tlds: { allow: ["com", "net"] },
   }),
   phone: Joi.string().min(10).max(10).required(),
+  favorite: Joi.boolean(),
+});
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = {
   contactSchema,
+  updateFavoriteSchema,
 };
