@@ -1,4 +1,5 @@
 const controls = require("./contacts");
+const auth = require("./auth");
 
 module.exports = {
   getAllContacts: controls.getAllContacts,
@@ -7,4 +8,6 @@ module.exports = {
   updateContact: controls.createContact,
   updateFavorite: controls.updateFavorite,
   removeContact: controls.removeContact,
+  register: auth.register,
+  login: auth.login,
 };

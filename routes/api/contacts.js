@@ -12,9 +12,9 @@ const {
 const { validateBody, validId, validateFavorite } = require("../../middlewars");
 
 const {
-  contactSchema,
+  addContactSchema,
   updateFavoriteSchema,
-} = require("../../schems/contacts");
+} = require("../../models/contact");
 
 const router = express.Router();
 
@@ -22,9 +22,14 @@ router.get("/", getAllContacts);
 
 router.get("/:contactId", validId, getContactById);
 
-router.post("/", validateBody(contactSchema), createContact);
+router.post("/", validateBody(addContactSchema), createContact);
 
-router.put("/:contactId", validId, validateBody(contactSchema), updateContact);
+router.put(
+  "/:contactId",
+  validId,
+  validateBody(addContactSchema),
+  updateContact
+);
 
 router.patch(
   "/:contactId/favorite",
