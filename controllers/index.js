@@ -10,4 +10,7 @@ module.exports = {
   removeContact: controls.removeContact,
   register: auth.register,
   login: auth.login,
+  getCurrent: auth.getCurrent,
+  logout: auth.logout,
+  updateSubscription: auth.updateSubscription,
 };

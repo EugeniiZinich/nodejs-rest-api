@@ -9,7 +9,14 @@ const {
   removeContact,
 } = require("../../controllers");
 
-const { validateBody, validId, validateFavorite } = require("../../middlewars");
+const {
+  validateBody,
+  validId,
+  validateFavorite,
+  authenticate,
+} = require("../../middlewars");
+
+console.log(authenticate);
 
 const {
   addContactSchema,
@@ -18,14 +25,15 @@ const {
 
 const router = express.Router();
 
-router.get("/", getAllContacts);
+router.get("/", authenticate, getAllContacts);
 
-router.get("/:contactId", validId, getContactById);
+router.get("/:contactId", authenticate, validId, getContactById);
 
-router.post("/", validateBody(addContactSchema), createContact);
+router.post("/", authenticate, validateBody(addContactSchema), createContact);
 
 router.put(
   "/:contactId",
+  authenticate,
   validId,
   validateBody(addContactSchema),
   updateContact
@@ -33,11 +41,12 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
+  authenticate,
   validId,
   validateFavorite(updateFavoriteSchema),
   updateFavorite
 );
 
-router.delete("/:contactId", validId, removeContact);
+router.delete("/:contactId", authenticate, validId, removeContact);
 
 module.exports = router;

@@ -1,6 +1,7 @@
-const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const { User } = require("../models/user");
 
 const { ctrlWrapper, HttpError } = require("../helpers");
 
@@ -48,12 +49,50 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
 
+  await User.findByIdAndUpdate(user._id, { token });
+
+  const { subscription } = user;
+
   res.json({
     token,
+    user: {
+      email,
+      subscription,
+    },
+  });
+};
+
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.json({ email, subscription });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+
+  await User.findByIdAndUpdate(_id, { token: "" });
+
+  res.json({
+    message: "Logout success",
+  });
+};
+
+const updateSubscription = async (req, res) => {
+  const { subscription } = req.body;
+  const { _id } = req.user;
+
+  await User.findByIdAndUpdate(_id, { subscription });
+
+  res.json({
+    message: "Subscription is update",
   });
 };
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };
