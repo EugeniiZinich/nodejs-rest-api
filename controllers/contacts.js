@@ -4,6 +4,7 @@ const { ctrlWrapper, HttpError } = require("../helpers");
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
+
   const { page = 1, limit = 10, favorite } = req.query;
 
   if (favorite === "true") {
@@ -28,7 +29,6 @@ const getAllContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  // const finedContact = await Contact.findOne({ _id: contactId });
   const finedContact = await Contact.findById(contactId);
 
   if (!finedContact) {

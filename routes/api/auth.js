@@ -27,4 +27,6 @@ router.patch(
   updateSubscription
 );
 
+router.patch("/avatars", authenticate);
+
 module.exports = router;
