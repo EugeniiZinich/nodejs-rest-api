@@ -1,5 +1,5 @@
 const express = require("express");
-const { validateBody, authenticate } = require("../../middlewars");
+const { validateBody, authenticate, upload } = require("../../middlewars");
 const { schemas } = require("../../models/user");
 
 const {
@@ -8,6 +8,7 @@ const {
   getCurrent,
   logout,
   updateSubscription,
+  updateAvatar,
 } = require("../../controllers");
 
 const router = express.Router();
@@ -27,6 +28,6 @@ router.patch(
   updateSubscription
 );
 
-router.patch("/avatars", authenticate);
+router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);
 
 module.exports = router;

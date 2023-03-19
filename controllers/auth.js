@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
 
 const { User } = require("../models/user");
 
@@ -9,6 +11,8 @@ const { ctrlWrapper, HttpError } = require("../helpers");
 require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -38,12 +42,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  console.log(email);
-  console.log(password);
-
   const user = await User.findOne({ email });
-
-  console.log(user);
 
   if (!user) {
     throw HttpError(401, "Email or password invalid");
@@ -101,10 +100,27 @@ const updateSubscription = async (req, res) => {
   });
 };
 
+const updateAvatar = async (res, req) => {
+  const { _id: id } = req.user;
+  const { path: tempUpload, originalName } = req.file;
+  const fileName = `${id}_${originalName}`;
+
+  const resultUpload = path.join(avatarsDir, fileName);
+
+  await fs.rename(tempUpload, resultUpload);
+
+  const avatarUrl = path.join("avatars", fileName);
+
+  await User.findByIdAndUpdate(id, { avatarUrl });
+
+  res.json({ avatarUrl });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

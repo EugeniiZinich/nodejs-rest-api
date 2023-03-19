@@ -13,4 +13,5 @@ module.exports = {
   getCurrent: auth.getCurrent,
   logout: auth.logout,
   updateSubscription: auth.updateSubscription,
+  updateAvatar: auth.updateAvatar,
 };
