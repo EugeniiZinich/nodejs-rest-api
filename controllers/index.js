@@ -14,4 +14,6 @@ module.exports = {
   logout: auth.logout,
   updateSubscription: auth.updateSubscription,
   updateAvatar: auth.updateAvatar,
+  verifyEmail: auth.verifyEmail,
+  resendVerifyEmail: auth.resendVerifyEmail,
 };

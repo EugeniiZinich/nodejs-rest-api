@@ -4,6 +4,8 @@ const { schemas } = require("../../models/user");
 
 const {
   register,
+  verifyEmail,
+  resendVerifyEmail,
   login,
   getCurrent,
   logout,
@@ -14,6 +16,10 @@ const {
 const router = express.Router();
 
 router.post("/register", validateBody(schemas.registerSchema), register);
+
+router.get("/verify/:verificationCode", verifyEmail);
+
+router.post("/verify", validateBody(schemas.emailSchema), resendVerifyEmail);
 
 router.post("/login", validateBody(schemas.loginSchema), login);
 
