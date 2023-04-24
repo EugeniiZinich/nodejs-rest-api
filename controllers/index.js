@@ -16,4 +16,6 @@ module.exports = {
   updateAvatar: auth.updateAvatar,
   verifyEmail: auth.verifyEmail,
   resendVerifyEmail: auth.resendVerifyEmail,
+  googleAuth: auth.googleAuth,
+  googleRedirect: auth.googleRedirect,
 };

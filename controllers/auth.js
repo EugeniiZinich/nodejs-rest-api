@@ -6,15 +6,33 @@ const fs = require("fs/promises");
 const Jimp = require("jimp");
 const { v4: uuidv4 } = require("uuid");
 
+require("dotenv").config();
+
 const { User } = require("../models/user");
 
 const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
 
-require("dotenv").config();
-
 const { SECRET_KEY, BASE_URL } = process.env;
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+
+const googleAuth = async (req, res) => {
+  const { _id: id } = req.user;
+
+  const payload = {
+    id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, {
+    expiresIn: "23h",
+  });
+
+  await User.findByIdAndUpdate(id, { token });
+
+  res.redirect(
+    `http://localhost:3000/goit-react-hw-08-phonebook?token=${token}`
+  );
+};
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -185,6 +203,8 @@ const updateAvatar = async (req, res) => {
 };
 
 module.exports = {
+  googleAuth: ctrlWrapper(googleAuth),
+  // googleRedirect: ctrlWrapper(googleRedirect),
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
