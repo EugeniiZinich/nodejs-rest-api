@@ -3,6 +3,7 @@ const validId = require("./itsValidId");
 const validateFavorite = require("./validateFavorite");
 const authenticate = require("./authenticate");
 const upload = require("./upload");
+const passport = require("./google-auth");
 
 module.exports = {
   validateBody,
@@ -10,4 +11,5 @@ module.exports = {
   validateFavorite,
   authenticate,
   upload,
+  passport,
 };
