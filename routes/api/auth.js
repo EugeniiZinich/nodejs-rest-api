@@ -2,7 +2,7 @@ const express = require("express");
 const {
   validateBody,
   authenticate,
-  upload,
+  cloudUpload,
   passport,
 } = require("../../middlewars");
 const { schemas } = require("../../models/user");
@@ -21,6 +21,18 @@ const {
 } = require("../../controllers");
 
 const router = express.Router();
+
+const cloudAvatarOptions = {
+  fieldname: "avatar",
+  destFolder: "contactsAvatars",
+  transformation: {
+    width: 100,
+    height: 100,
+    crop: "fill",
+    gravity: "auto",
+    zoom: 0.75,
+  },
+};
 
 router.get(
   "/google",
@@ -46,12 +58,17 @@ router.get("/current", authenticate, getCurrent);
 router.post("/logout", authenticate, logout);
 
 router.patch(
-  "/users",
+  "/subscription",
   authenticate,
   validateBody(schemas.subscriptionSchema),
   updateSubscription
 );
 
-router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);
+router.patch(
+  "/avatars",
+  authenticate,
+  cloudUpload(cloudAvatarOptions),
+  updateAvatar
+);
 
 module.exports = router;

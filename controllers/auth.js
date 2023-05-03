@@ -1,9 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
-const path = require("path");
-const fs = require("fs/promises");
-const Jimp = require("jimp");
+// const path = require("path");
+// const fs = require("fs/promises");
+// const Jimp = require("jimp");
 const { v4: uuidv4 } = require("uuid");
 
 require("dotenv").config();
@@ -14,7 +14,7 @@ const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
 
 const { SECRET_KEY, BASE_URL } = process.env;
 
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+// const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const googleAuth = async (req, res) => {
   const { _id: id } = req.user;
@@ -40,7 +40,7 @@ const register = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user) {
-    throw HttpError(409, "Email already in use");
+    throw HttpError(409, "Email or password already in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
@@ -121,10 +121,6 @@ const login = async (req, res) => {
     throw HttpError(401, "Email or password invalid");
   }
 
-  if (!user.verify) {
-    throw HttpError(404, "User not found");
-  }
-
   const passwordCompare = await bcrypt.compare(password, user.password);
 
   if (!passwordCompare) {
@@ -153,7 +149,7 @@ const login = async (req, res) => {
 const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
 
-  res.json({ email, subscription });
+  res.status(201).json([{ email, subscription }]);
 };
 
 const logout = async (req, res) => {
@@ -161,45 +157,34 @@ const logout = async (req, res) => {
 
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  res.json({
+  res.status(200).json({
     message: "Logout success",
   });
 };
 
 const updateSubscription = async (req, res) => {
   const { subscription } = req.body;
-  const { _id } = req.user;
+  const { _id: id } = req.user;
 
-  await User.findByIdAndUpdate(_id, { subscription });
+  await User.findByIdAndUpdate(id, { subscription });
 
-  res.json({
+  res.status(200).json({
     message: "Subscription is update",
+    subscription,
   });
 };
 
 const updateAvatar = async (req, res) => {
   const { _id: id } = req.user;
 
-  const { path: tempUpload, originalname } = req.file;
+  if (!req.file) {
+    throw HttpError(400, "Controller: Image require");
+  }
+  const { path } = req.file;
 
-  const fileName = `${id}_${originalname}`;
+  await User.findByIdAndUpdate(id, { avatarURL: path });
 
-  const resultUpload = path.join(avatarsDir, fileName);
-
-  await fs.rename(tempUpload, resultUpload);
-
-  const avatarUrl = path.join("avatars", fileName);
-  await Jimp.read(avatarUrl)
-    .then((name) => {
-      return name.resize(250, 250).write(avatarUrl); // save
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-
-  await User.findByIdAndUpdate(id, { avatarUrl });
-
-  res.json({ avatarUrl });
+  res.status(200).json([{ avatarURL: path }]);
 };
 
 module.exports = {
