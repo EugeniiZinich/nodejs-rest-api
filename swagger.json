@@ -110,7 +110,7 @@
         }
       }
     },
-    "/api/auth/current": {
+    "/api/auth/logout": {
       "get": {
         "tags": ["Auth"],
         "summary": "Logout user",
@@ -123,14 +123,14 @@
         }
       }
     },
-    "/api/auth/logout": {
-      "post": {
+    "/api/auth/current": {
+      "get": {
         "tags": ["Auth"],
         "summary": "Current user",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -223,6 +223,224 @@
           },
           "400": {
             "description": "Unsupported file format. Must be jpeg, png, jpg"
+          }
+        }
+      }
+    },
+    "/api/contacts": {
+      "get": {
+        "tags": ["Contacts"],
+        "summary": "Get all user contacts",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllContactResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/contacts/create": {
+      "post": {
+        "tags": ["Contacts"],
+        "summary": "Create new contact",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Contacts object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Contact create",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. [name, phone] is require"
+          }
+        }
+      }
+    },
+    "/api/contacts/{contactId}": {
+      "get": {
+        "tags": ["Contacts"],
+        "summary": "Get contacts by ID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "The ID contacts which need to find ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "schema": {
+          "type": "string"
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactIDResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Is not valid ID"
+          }
+        }
+      }
+    },
+    "/api/contacts/update/{contactId}": {
+      "put": {
+        "tags": ["Contacts"],
+        "summary": "Update contact",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "The ID contacts which need to update ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update contact object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactIDResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/contacts/favorite/{contactId}": {
+      "patch": {
+        "tags": ["Contacts"],
+        "summary": "Update favorite status",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "The ID contacts which need to update ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update favorite object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFavoriteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactIDResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing field favorite"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/contacts/delete/{contactId}": {
+      "delete": {
+        "tags": ["Contacts"],
+        "summary": "Delete user contact",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "The ID contacts which need to update ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return deleted object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoveResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ContactID is not valid id"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -365,6 +583,256 @@
               "type": "string",
               "description": "User`s avatar",
               "example": "https://res.cloudinary.com/dzqzq9kcl/image/upload/v1683110599/contactsAvatars/64521a3d3a0c0ab1986b3f4d_1683110599.jpg"
+            }
+          }
+        }
+      },
+      "AllContactResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Contact ID"
+            },
+            "name": {
+              "type": "string",
+              "description": "Contact name",
+              "format": "name"
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email",
+              "example": "ex@mail.com"
+            },
+            "phone": {
+              "type": "string",
+              "description": "contact phone",
+              "example": "380999999999"
+            },
+            "favorite": {
+              "type": "boolean"
+            },
+            "owner": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "User ID who create contact"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "User name who create contact"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User email who create contact"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ContactRequest": {
+        "type": "object",
+        "required": ["name", "phone"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Contact name",
+            "format": "name"
+          },
+          "email": {
+            "type": "string",
+            "description": "Contact email",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "minimum": 10,
+            "maximum": 12,
+            "description": "Contact phone",
+            "example": "380999999999"
+          },
+          "favorite": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ContactResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "ID contact object",
+              "example": "6453b3cc05e5bebb5f195f5f"
+            },
+            "name": {
+              "type": "string",
+              "description": "Contact name",
+              "format": "name"
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email",
+              "format": "email"
+            },
+            "phone": {
+              "type": "string",
+              "description": "Contact number",
+              "example": "380999999999"
+            },
+            "favorite": {
+              "type": "boolean"
+            },
+            "owner": {
+              "type": "string",
+              "description": "User ID who create contact",
+              "example": "6453b3cc05e5bebb5f195f5f"
+            },
+
+            "createdAt": {
+              "type": "string",
+              "description": "Date when contact created was",
+              "example": "2023-05-04T13:31:56.441Z"
+            },
+            "updatedAt": {
+              "type": "string",
+              "description": "Date when contact update was",
+              "example": "2023-05-04T13:31:56.441Z"
+            }
+          }
+        }
+      },
+      "ContactIDResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Contact name",
+              "format": "name"
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email",
+              "format": "email"
+            },
+            "phone": {
+              "type": "string",
+              "description": "Contact number",
+              "example": "380999999999"
+            },
+            "favorite": {
+              "type": "boolean"
+            },
+            "owner": {
+              "type": "string",
+              "description": "User ID who create contact",
+              "example": "6453b3cc05e5bebb5f195f5f"
+            },
+            "_id": {
+              "type": "string",
+              "description": "ID contact object",
+              "example": "6453b3cc05e5bebb5f195f5f"
+            },
+            "createdAt": {
+              "type": "string",
+              "description": "Date when contact created was",
+              "example": "2023-05-04T13:31:56.441Z"
+            },
+            "updatedAt": {
+              "type": "string",
+              "description": "Date when contact update was",
+              "example": "2023-05-04T13:31:56.441Z"
+            }
+          }
+        }
+      },
+      "UpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Contact name",
+            "format": "name"
+          },
+          "email": {
+            "type": "string",
+            "description": "Contact email",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Contact phone number",
+            "example": "380888888888"
+          }
+        }
+      },
+      "UpdateFavoriteRequest": {
+        "type": "object",
+        "properties": {
+          "favorite": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RemoveResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "Delete success"
+            },
+            "deleted_contact": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "ID contact object",
+                  "example": "6453b3cc05e5bebb5f195f5f"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Contact name",
+                  "format": "name"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Contact email",
+                  "format": "email"
+                },
+                "phone": {
+                  "type": "string",
+                  "description": "Contact number",
+                  "example": "380999999999"
+                },
+                "favorite": {
+                  "type": "boolean"
+                },
+                "owner": {
+                  "type": "string",
+                  "description": "User ID who create contact",
+                  "example": "6453b3cc05e5bebb5f195f5f"
+                },
+
+                "createdAt": {
+                  "type": "string",
+                  "description": "Date when contact created was",
+                  "example": "2023-05-04T13:31:56.441Z"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "description": "Date when contact update was",
+                  "example": "2023-05-04T13:31:56.441Z"
+                }
+              }
             }
           }
         }

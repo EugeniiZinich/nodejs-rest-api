@@ -11,7 +11,7 @@ const getAllContacts = async (req, res) => {
     const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
 
     const getFavorite = contacts.filter((contact) => contact.favorite === true);
-    return res.json(getFavorite);
+    return res.status(200).json(getFavorite);
   }
 
   const skip = (page - 1) * limit;
@@ -35,14 +35,13 @@ const getContactById = async (req, res) => {
     throw HttpError(404, "Not Found");
   }
 
-  return res.json(finedContact);
+  return res.status(200).json(finedContact);
 };
 
 const createContact = async (req, res) => {
   const { _id: owner } = req.user;
-  console.log(req.body);
   const newContact = await Contact.create({ ...req.body, owner });
-  res.status(201).json(newContact);
+  res.status(201).json([newContact]);
 };
 
 const updateContact = async (req, res) => {
@@ -52,13 +51,14 @@ const updateContact = async (req, res) => {
 
   const result = await Contact.findByIdAndUpdate(contactId, data, {
     new: true,
-  }); // if l wont see new object, need add { new: true }, otherwise l will see old contact
-
+  });
+  // if l wont see new object, need add { new: true }, otherwise l will see old contact
+  console.log(result);
   if (!result) {
     throw HttpError(404, "Not Found");
   }
 
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const updateFavorite = async (req, res) => {
@@ -74,18 +74,19 @@ const updateFavorite = async (req, res) => {
     throw HttpError(404, "Not Found");
   }
 
-  res.json({ status: 200, data: result });
+  res.status(200).json([result]);
 };
 
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndDelete(contactId);
+  console.log(result);
 
   if (!result) {
     throw HttpError(404, "Not Found");
   }
 
-  res.json({ message: "Delete success", remove: result.deletedContact });
+  res.json([{ message: "Delete success", deleted_contact: result }]);
 };
 
 module.exports = {

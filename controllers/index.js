@@ -5,7 +5,7 @@ module.exports = {
   getAllContacts: controls.getAllContacts,
   getContactById: controls.getContactById,
   createContact: controls.createContact,
-  updateContact: controls.createContact,
+  updateContact: controls.updateContact,
   updateFavorite: controls.updateFavorite,
   removeContact: controls.removeContact,
   register: auth.register,

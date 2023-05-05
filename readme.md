@@ -1,31 +1,20 @@
-## GoIT Node.js Course Template Homework
+## ContactBook APP
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+- The application is written in NodeJS
+- The server is written on express
+- Saving data with mongoose home help
+- Data is stored in MongoDB
+- Images are stored on Cloudinary
+- Realized registration using Google
+- Passwords are hashed
 
-Додайте ментора до колаборації
+### Reference
 
-Для кожної домашньої роботи створюйте свою гілку.
+- [Backend Documentation ](https://contacts-04gv.onrender.com/api-docs)
+- [Live Page ](https://yevheniizinych.github.io/goit-react-hw-08-phonebook/)
+- [FrontEnd ](https://github.com/YevheniiZinych/goit-react-hw-08-phonebook)
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+### Start project
 
-Кожна нова гілка для др повинна робитися з master
-
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
-
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
-
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
-
-### Команди:
-
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+- `npm start` &mdash; server start in mode production
+- `npm run dev` &mdash; start the server in development mode

@@ -14,6 +14,7 @@ const contactSchema = new Schema(
     },
     phone: {
       type: String,
+      required: [true, "Set phone for contact"],
     },
     favorite: {
       type: Boolean,
@@ -38,7 +39,18 @@ const addContactSchema = Joi.object({
     minDomainSegments: 2,
     tlds: { allow: ["com", "net"] },
   }),
-  phone: Joi.string().min(10).max(10).required(),
+  phone: Joi.string().min(10).max(12).required(),
+  favorite: Joi.boolean(),
+});
+
+const updateContactSchema = Joi.object({
+  name: Joi.string().alphanum().min(3).max(30),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+
+  phone: Joi.string().min(10).max(12),
   favorite: Joi.boolean(),
 });
 
@@ -50,4 +62,5 @@ module.exports = {
   addContactSchema,
   updateFavoriteSchema,
   Contact,
+  updateContactSchema,
 };
