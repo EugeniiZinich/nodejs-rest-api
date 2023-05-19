@@ -65,6 +65,7 @@ const register = async (req, res) => {
   await res.status(201).json({
     name: newUser.name,
     email: newUser.email,
+    avatarURL: newUser.avatarURL,
   });
 };
 
