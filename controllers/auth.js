@@ -1,9 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
-// const path = require("path");
-// const fs = require("fs/promises");
-// const Jimp = require("jimp");
 const { v4: uuidv4 } = require("uuid");
 
 require("dotenv").config();
@@ -13,8 +10,6 @@ const { User } = require("../models/user");
 const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
 
 const { SECRET_KEY, BASE_URL } = process.env;
-
-// const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const googleAuth = async (req, res) => {
   const { _id: id } = req.user;
@@ -45,14 +40,33 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
+
   const verificationCode = uuidv4();
 
-  const newUser = await User.create({
+  await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
     verificationCode,
   });
+
+  const { _id } = await User.findOne({ email });
+
+  const payload = {
+    id: _id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, {
+    expiresIn: "23h",
+  });
+
+  const newUser = await User.findByIdAndUpdate(
+    _id,
+    { token },
+    {
+      new: true,
+    }
+  );
 
   const verifyEmail = {
     to: email,
@@ -66,6 +80,7 @@ const register = async (req, res) => {
     name: newUser.name,
     email: newUser.email,
     avatarURL: newUser.avatarURL,
+    token: newUser.token,
   });
 };
 
