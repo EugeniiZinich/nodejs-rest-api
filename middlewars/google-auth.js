@@ -12,7 +12,6 @@ const googleParams = {
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET_ID,
   callbackURL: `${BASE_URL}/api/auth/google-redirect`,
-  // callbackURL: "http://localhost:5000/api/v1/auth/google/callback",
   passReqToCallback: true,
 };
 

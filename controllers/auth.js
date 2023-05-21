@@ -12,7 +12,7 @@ const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
 const { SECRET_KEY, BASE_URL } = process.env;
 
 const googleAuth = async (req, res) => {
-  const { _id: id } = req.user;
+  const { _id: id, email } = req.user;
 
   const payload = {
     id,
@@ -21,8 +21,9 @@ const googleAuth = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY, {
     expiresIn: "23h",
   });
+  const avatarURL = gravatar.url(email);
 
-  await User.findByIdAndUpdate(id, { token });
+  await User.findByIdAndUpdate(id, { token, avatarURL });
 
   res.redirect(
     `http://localhost:3000/goit-react-hw-08-phonebook?token=${token}`
@@ -164,9 +165,9 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email, subscription } = req.user;
+  const { email, subscription, name, avatarURL } = req.user;
 
-  res.status(200).json([{ email, subscription }]);
+  res.status(200).json([{ email, subscription, name, avatarURL }]);
 };
 
 const logout = async (req, res) => {
