@@ -24,7 +24,7 @@ const getAllContacts = async (req, res) => {
     throw HttpError(404, "Not Found");
   }
 
-  return res.json(contacts);
+  return res.status(200).json(contacts);
 };
 
 const getContactById = async (req, res) => {

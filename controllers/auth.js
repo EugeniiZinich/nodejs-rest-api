@@ -167,7 +167,14 @@ const login = async (req, res) => {
 const getCurrent = async (req, res) => {
   const { email, subscription, name, avatarURL } = req.user;
 
-  res.status(200).json([{ email, subscription, name, avatarURL }]);
+  res.status(200).json({
+    user: {
+      email,
+      subscription,
+      name,
+      avatarURL,
+    },
+  });
 };
 
 const logout = async (req, res) => {
