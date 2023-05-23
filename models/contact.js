@@ -50,7 +50,12 @@ const addContactSchema = Joi.object({
 });
 
 const updateContactSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30),
+  name: Joi.string()
+    .pattern(
+      new RegExp("^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$")
+    )
+    .min(3)
+    .max(30),
   email: Joi.string().email({
     minDomainSegments: 2,
     tlds: { allow: ["com", "net"] },
