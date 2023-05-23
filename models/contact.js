@@ -34,7 +34,13 @@ contactSchema.post("save", handleMongooseError);
 const Contact = model("contact", contactSchema);
 
 const addContactSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
+  name: Joi.string()
+    .pattern(
+      new RegExp("^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$")
+    )
+    .min(3)
+    .max(30)
+    .required(),
   email: Joi.string().email({
     minDomainSegments: 2,
     tlds: { allow: ["com", "net"] },
