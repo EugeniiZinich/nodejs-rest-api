@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "title": "ContactBook",
     "description": "Base URL https://contacts-04gv.onrender.com"
   },
@@ -55,7 +55,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -485,6 +485,20 @@
             "type": "string",
             "description": "User`s email",
             "format": "email"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "description": "Default user avatar",
+            "example": "//www.gravatar.com/avatar/d57fa4c185e22907e97382fa59233cdf"
+          },
+          "token": {
+            "type": "string",
+            "description": "User token"
+          },
+          "subscription": {
+            "type": "string",
+            "description": "User subscription",
+            "example": "pro"
           }
         }
       },
