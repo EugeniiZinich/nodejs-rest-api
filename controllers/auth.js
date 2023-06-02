@@ -153,13 +153,14 @@ const login = async (req, res) => {
 
   await User.findByIdAndUpdate(user._id, { token });
 
-  const { subscription } = user;
+  const { subscription, avatarUrl } = user;
 
   res.json({
     token,
     user: {
       email,
       subscription,
+      avatarUrl,
     },
   });
 };
