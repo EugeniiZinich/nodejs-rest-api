@@ -29,28 +29,28 @@ const cloudUpload = (cloudOptions) => {
       return {
         folder: destFolder,
         public_id: imageName,
-        allowed_formats: ["jpg", "jpeg", "png"],
+        // allowed_formats: ["jpg", "jpeg", "png"],
         transformation: transformation,
         overwrite: true,
       };
     },
   });
 
-  const fileFilter = (req, file, cd) => {
-    if (
-      file.mimetype === "image/jpeg" ||
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg"
-    ) {
-      cd(null, true);
-    } else {
-      cd({ message: "Unsupported file format. Must be jpeg, png, jpg" }, false);
-    }
-  };
+  // const fileFilter = (req, file, cd) => {
+  //   if (
+  //     file.mimetype === "image/jpeg" ||
+  //     file.mimetype === "image/png" ||
+  //     file.mimetype === "image/jpg"
+  //   ) {
+  //     cd(null, true);
+  //   } else {
+  //     cd({ message: "Unsupported file format. Must be jpeg, png, jpg" }, false);
+  //   }
+  // };
 
   const imageUpload = multer({
     storage,
-    fileFilter: fileFilter,
+    // fileFilter: fileFilter,
   });
 
   return imageUpload.single(fieldname);
