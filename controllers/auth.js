@@ -215,7 +215,6 @@ const updateAvatar = async (req, res) => {
 
 module.exports = {
   googleAuth: ctrlWrapper(googleAuth),
-  // googleRedirect: ctrlWrapper(googleRedirect),
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
