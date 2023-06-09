@@ -13,6 +13,7 @@ const { SECRET_KEY, BASE_URL } = process.env;
 
 const googleAuth = async (req, res) => {
   const { _id: id, email } = req.user;
+  let avatarURL = "";
 
   const payload = {
     id,
@@ -21,7 +22,14 @@ const googleAuth = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY, {
     expiresIn: "23h",
   });
-  const avatarURL = gravatar.url(email);
+
+  const currentUser = await User.findById(id);
+
+  if (currentUser.avatarURL) {
+    avatarURL = currentUser.avatarURL;
+  } else {
+    avatarURL = gravatar.url(email);
+  }
 
   await User.findByIdAndUpdate(id, { token, avatarURL });
 
