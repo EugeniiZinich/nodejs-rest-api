@@ -23,8 +23,8 @@ const {
 const router = express.Router();
 
 const cloudAvatarOptions = {
-  fieldname: "avatar",
-  destFolder: "contactsAvatars",
+  fieldName: "avatar",
+  destFolder: "contactsAvatar",
   transformation: {
     width: 100,
     height: 100,

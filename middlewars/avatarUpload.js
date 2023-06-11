@@ -15,7 +15,7 @@ cloudinary.config({
 });
 
 const cloudUpload = (cloudOptions) => {
-  const { fieldname, destFolder, transformation } = cloudOptions;
+  const { fieldName, destFolder, transformation } = cloudOptions;
   // якщо папка призначення avatars то присвоюємо ім'я яке дорівнює id користувача
   //  встановлюємо overwrite: true щоб один і той самий користувач при зміні аватарки перезаписував старий файл
   const storage = new CloudinaryStorage({
@@ -24,36 +24,37 @@ const cloudUpload = (cloudOptions) => {
       const timestamp = Math.floor(Date.now() / 1000);
       const { _id } = req.user;
       const imageName =
-        destFolder === "avatars" ? `${_id}` : `${_id}_${timestamp}`;
+        destFolder === "contactsAvatar" ? `${_id}` : `${_id}_${timestamp}`;
 
       return {
         folder: destFolder,
         public_id: imageName,
-        allowed_formats: ["jpg", "jpeg", "png"],
+        // allowed_formats: ["jpg", "jpeg", "png"],
+        format: "png",
         transformation: transformation,
         overwrite: true,
       };
     },
   });
 
-  const fileFilter = (req, file, cd) => {
-    if (
-      file.mimetype === "image/jpeg" ||
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg"
-    ) {
-      cd(null, true);
-    } else {
-      cd({ message: "Unsupported file format. Must be jpeg, png, jpg" }, false);
-    }
-  };
+  // const fileFilter = (req, file, cd) => {
+  //   if (
+  //     file.mimetype === "image/jpeg" ||
+  //     file.mimetype === "image/png" ||
+  //     file.mimetype === "image/jpg"
+  //   ) {
+  //     cd(null, true);
+  //   } else {
+  //     cd({ message: "Unsupported file format. Must be jpeg, png, jpg" }, false);
+  //   }
+  // };
 
   const imageUpload = multer({
     storage,
-    fileFilter: fileFilter,
+    // fileFilter: fileFilter,
   });
 
-  return imageUpload.single(fieldname);
+  return imageUpload.single(fieldName);
 };
 
 module.exports = cloudUpload;
