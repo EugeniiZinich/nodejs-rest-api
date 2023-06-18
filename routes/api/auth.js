@@ -2,11 +2,10 @@ const express = require("express");
 const {
   validateBody,
   authenticate,
-  // cloudUpload,
+  cloudUpload,
   passport,
 } = require("../../middlewars");
 const { schemas } = require("../../models/user");
-const uploadAvatar = require("../../middlewars/avatarUpload");
 const {
   register,
   verifyEmail,
@@ -22,17 +21,17 @@ const {
 
 const router = express.Router();
 
-// const cloudAvatarOptions = {
-//   fieldName: "avatar",
-//   destFolder: "contactsAvatar",
-//   transformation: {
-//     width: 100,
-//     height: 100,
-//     crop: "fill",
-//     gravity: "auto",
-//     zoom: 0.75,
-//   },
-// };
+const cloudAvatarOptions = {
+  fieldName: "avatar",
+  destFolder: "contactsAvatar",
+  transformation: {
+    width: 100,
+    height: 100,
+    crop: "fill",
+    gravity: "auto",
+    zoom: 0.75,
+  },
+};
 
 router.get(
   "/google",
@@ -67,8 +66,8 @@ router.patch(
 router.patch(
   "/avatars",
   authenticate,
-  uploadAvatar.single("avatar"),
-  // cloudUpload(cloudAvatarOptions),
+
+  cloudUpload(cloudAvatarOptions),
   updateAvatar
 );
 
