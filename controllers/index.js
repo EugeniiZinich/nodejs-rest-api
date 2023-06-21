@@ -18,4 +18,5 @@ module.exports = {
   resendVerifyEmail: auth.resendVerifyEmail,
   googleAuth: auth.googleAuth,
   googleRedirect: auth.googleRedirect,
+  updateName: auth.updateName,
 };

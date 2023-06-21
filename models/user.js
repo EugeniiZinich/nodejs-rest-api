@@ -67,11 +67,19 @@ const subscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
+const updateNameSchema = Joi.object({
+  name: Joi.string()
+    .pattern(new RegExp("[а-яА-Яa-zA-Z0-9]+"))
+    .min(3)
+    .required(),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
   subscriptionSchema,
   emailSchema,
+  updateNameSchema,
 };
 
 const User = model("user", userSchema);

@@ -16,6 +16,7 @@ const {
   updateSubscription,
   updateAvatar,
   googleAuth,
+  updateName,
   // googleRedirect,
 } = require("../../controllers");
 
@@ -64,9 +65,15 @@ router.patch(
 );
 
 router.patch(
+  "/name",
+  authenticate,
+  validateBody(schemas.updateNameSchema),
+  updateName
+);
+
+router.patch(
   "/avatars",
   authenticate,
-
   cloudUpload(cloudAvatarOptions),
   updateAvatar
 );

@@ -208,6 +208,17 @@ const updateSubscription = async (req, res) => {
   });
 };
 
+const updateName = async (req, res) => {
+  const { name } = req.body;
+  const { _id: id } = req.user;
+  await User.findByIdAndUpdate(id, { name });
+
+  res.status(200).json({
+    message: "Name is update",
+    name,
+  });
+};
+
 const updateAvatar = async (req, res) => {
   const { _id: id } = req.user;
 
@@ -233,4 +244,5 @@ module.exports = {
   updateAvatar: ctrlWrapper(updateAvatar),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
+  updateName: ctrlWrapper(updateName),
 };

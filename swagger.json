@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "title": "ContactBook",
     "description": "Base URL https://contacts-04gv.onrender.com"
   },
@@ -176,6 +176,40 @@
           },
           "400": {
             "description": "Bad request must be starter, pro, business"
+          }
+        }
+      }
+    },
+    "/api/auth/name": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Update name",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Name object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NameRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NameResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
           }
         }
       }
@@ -589,6 +623,34 @@
               "type": "string",
               "description": "Updated subscription",
               "example": "pro"
+            }
+          }
+        }
+      },
+      "NameRequest": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "format": "name"
+          }
+        }
+      },
+      "NameResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "Name is update",
+              "example": "Name is update"
+            },
+            "name": {
+              "type": "string",
+              "description": "Updated user name",
+              "example": "pirat"
             }
           }
         }
