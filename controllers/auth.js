@@ -14,7 +14,7 @@ const { SECRET_KEY, BASE_URL } = process.env;
 const googleAuth = async (req, res) => {
   const { _id: id, email } = req.user;
   let avatarURL = "";
-
+  let name = "";
   const payload = {
     id,
   };
@@ -27,11 +27,13 @@ const googleAuth = async (req, res) => {
 
   if (currentUser.avatarURL) {
     avatarURL = currentUser.avatarURL;
+  } else if (currentUser.name) {
+    name = currentUser.name;
   } else {
     avatarURL = gravatar.url(email);
   }
 
-  await User.findByIdAndUpdate(id, { token, avatarURL });
+  await User.findByIdAndUpdate(id, { token, avatarURL, name });
 
   res.redirect(
     `http://localhost:3000/goit-react-hw-08-phonebook?token=${token}`
