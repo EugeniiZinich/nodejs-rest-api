@@ -16,8 +16,6 @@ const {
   authenticate,
 } = require("../../middlewars");
 
-console.log(authenticate);
-
 const {
   addContactSchema,
   updateFavoriteSchema,

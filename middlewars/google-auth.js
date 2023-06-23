@@ -2,6 +2,7 @@ const passport = require("passport");
 const { Strategy } = require("passport-google-oauth2");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
+const gravatar = require("gravatar");
 const { User } = require("../models/user");
 
 require("dotenv").config();
@@ -33,7 +34,14 @@ const googleCallback = async (
 
     const password = await bcrypt.hash(uuidv4(), 10);
 
-    const newUser = await User.create({ email, password, name: displayName });
+    const defAvatar = gravatar.url(email);
+
+    const newUser = await User.create({
+      email,
+      password,
+      name: displayName,
+      avatarURL: defAvatar,
+    });
 
     return done(null, newUser);
   } catch (error) {
