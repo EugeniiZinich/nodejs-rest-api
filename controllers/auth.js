@@ -27,7 +27,7 @@ const googleAuth = async (req, res) => {
   });
 
   res.redirect(
-    `http://localhost:3000/goit-react-hw-08-phonebook?token=${token}`
+    `https://yevheniizinych.github.io/goit-react-hw-08-phonebook/?token=${token}`
   );
 };
 
