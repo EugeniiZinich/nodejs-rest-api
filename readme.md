@@ -16,8 +16,9 @@
 
 ### Start project
 
+- `npm i` &mdash; install all dependencies for the project
 - `npm start` &mdash; server start in mode production
 
-  For start in development mode you need set in devDependencies `npm i -D nodemon` &mdash;
+  For start in development mode you need set in devDependencies `npm i -D nodemon`
 
 - `npm run dev` &mdash; start the server in development mode
